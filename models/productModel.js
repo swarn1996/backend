@@ -9,7 +9,17 @@ export const getProduct = async () => {
     const connection = await getConnection();
     const queryResult = await query("SELECT * FROM product");
     connection.release();
-    return queryResult;
+
+    // Map the query result and update the image URL
+    const products = queryResult.map((product) => {
+      return {
+        ...product,
+        image: `http://localhost:5000${product.image.replace(/^"|"$/g, '').replace('/Users/shubhamsharma/Documents/ren-ath-backend/public', '')}`
+      };
+    });
+
+    return products;
+    // return queryResult;
   } catch (error) {
     return error;
   }
